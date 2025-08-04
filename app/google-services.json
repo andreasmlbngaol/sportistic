@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "663743186649",
+    "project_id": "sportistic-a3d07",
+    "storage_bucket": "sportistic-a3d07.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:663743186649:android:5cbd564c9c52c6b19d60c8",
+        "android_client_info": {
+          "package_name": "com.jawapbo.sportistic"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "663743186649-c5ohpmshnuhtdshbkaru4d8j9645geq2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jawapbo.sportistic",
+            "certificate_hash": "03af83df219ca0dc532bd6b61d9452f6cd85350a"
+          }
+        },
+        {
+          "client_id": "663743186649-11oeus5ebepp68vkv2dlel10v9p0h2hc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCjDnqRiGm70QhAUTXp40SQmzo3xVp8anw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "663743186649-11oeus5ebepp68vkv2dlel10v9p0h2hc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
