@@ -4,6 +4,14 @@
     <selectionStates>
       <SelectionState runConfigName="customer">
         <option name="selectionMode" value="DROPDOWN" />
+        <DropdownSelection timestamp="2025-08-11T09:49:40.312453800Z">
+          <Target type="DEFAULT_BOOT">
+            <handle>
+              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\andre\.android\avd\Android_16.avd" />
+            </handle>
+          </Target>
+        </DropdownSelection>
+        <DialogSelection />
       </SelectionState>
       <SelectionState runConfigName="merchant">
         <option name="selectionMode" value="DROPDOWN" />

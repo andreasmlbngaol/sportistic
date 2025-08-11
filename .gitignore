@@ -17,3 +17,5 @@ secrets.properties
 serviceAccountKey.json
 /customer-app/google-services.json
 /ktor/serviceAccountKey.json
+/ktor/src/main/resources/application.conf
+/ktor/src/main/resources/application.yaml
