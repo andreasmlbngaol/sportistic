@@ -1,0 +1,27 @@
+ktor:
+  development: true
+
+  server:
+    requestQueueLimit: 16
+    responseWriteTimeoutSeconds: 60
+    maxRequestSize: 5120  # 5MB
+
+  deployment:
+    port: 8080
+    host: "0.0.0.0"
+    watch:
+      - "server"
+
+  application:
+    modules:
+      - "com.jawapbo.sportistic.ApplicationKt.module"
+
+  database:
+    driver: "org.postgresql.Driver"
+    url: "jdbc:postgresql://localhost:5432/sportistic_db"
+    user: "andre"
+    password: "150503"
+    maxPoolSize: 3
+
+  jwt:
+    secretKey: "ini-secret-key-nya-ymma-wkwkwkwk"

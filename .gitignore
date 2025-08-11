@@ -14,3 +14,6 @@
 .cxx
 local.properties
 secrets.properties
+serviceAccountKey.json
+/customer-app/google-services.json
+/ktor/serviceAccountKey.json

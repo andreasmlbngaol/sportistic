@@ -19,6 +19,13 @@ dependencyResolutionManagement {
     }
 }
 
+plugins {
+    id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
+}
+
 rootProject.name = "Sportistic"
-include(":app")
- 
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+include(":customer-app")
+include(":shared")
+include("ktor")
+include(":merchant-app")
