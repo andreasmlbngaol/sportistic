@@ -1,14 +1,17 @@
 package com.jawapbo.sportistic.core.data
 
 import androidx.datastore.core.DataStore
+import com.jawapbo.sportistic.shared.data.auth.AuthDataStore
+import com.jawapbo.sportistic.shared.data.auth.AuthTokens
 import com.jawapbo.sportistic.shared.data.auth.User
+import com.jawapbo.sportistic.shared.data.core.AuthDataStoreManager
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 
-class AuthDataStoreManager(
+class AuthDataStoreManagerImpl(
     private val dataStore: DataStore<AuthDataStore>
-) {
-    suspend fun saveTokens(
+): AuthDataStoreManager {
+    override suspend fun saveTokens(
         accessToken: String,
         refreshToken: String
     ) {
@@ -22,17 +25,17 @@ class AuthDataStoreManager(
         }
     }
 
-    private suspend fun saveUser(
-        userData: User
+    override suspend fun saveUser(
+        user: User
     ) {
         dataStore.updateData { store ->
             store.copy(
-                user = userData
+                user = user
             )
         }
     }
 
-    suspend fun saveAuth(
+    override suspend fun saveAuth(
         tokens: AuthTokens,
         user: User
     ) {
@@ -40,25 +43,28 @@ class AuthDataStoreManager(
         saveUser(user)
     }
 
-    val user: User?
+    override val user: User?
         get() = runBlocking { getUser() }
 
-    suspend fun getUser(): User? {
+    override suspend fun getUser(): User? {
         val store = dataStore.data.first()
-        if (store.user == null) return null
 
-        return User(
-            id = store.user.id,
-            name = store.user.name,
-            email = store.user.email,
-            profilePictureUrl = store.user.profilePictureUrl,
-            method = store.user.method,
-            isEmailVerified = store.user.isEmailVerified,
-            createdAt = store.user.createdAt
-        )
+        store.user?.let {
+            return User(
+                id = it.id,
+                name = it.name,
+                email = it.email,
+                profilePictureUrl = it.profilePictureUrl,
+                method = it.method,
+                isEmailVerified = it.isEmailVerified,
+                createdAt = it.createdAt
+            )
+        }
+
+        return null
     }
 
-    suspend fun clearDataStore() {
+    override suspend fun clearDataStore() {
         dataStore.updateData { store ->
             store.copy(
                 tokens = null,
@@ -68,7 +74,7 @@ class AuthDataStoreManager(
     }
 
 
-    suspend fun getTokens(): AuthDataStore {
+    override suspend fun getTokens(): AuthDataStore {
         return dataStore.data.first()
     }
 }

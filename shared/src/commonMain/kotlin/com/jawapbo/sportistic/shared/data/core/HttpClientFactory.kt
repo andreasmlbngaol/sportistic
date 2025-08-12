@@ -1,40 +1,19 @@
-package com.jawapbo.sportistic.core.data
+package com.jawapbo.sportistic.shared.data.core
 
-import android.util.Log
-import com.jawapbo.sportistic.shared.data.auth.RefreshTokenResponse
 import com.jawapbo.sportistic.shared.data.auth.RefreshTokenRequest
-import com.jawapbo.sportistic.shared.data.core.LocalDateTimeSerializer
-import io.ktor.client.HttpClient
-import io.ktor.client.call.body
-import io.ktor.client.engine.HttpClientEngine
-import io.ktor.client.plugins.ClientRequestException
-import io.ktor.client.plugins.HttpResponseValidator
-import io.ktor.client.plugins.HttpSend
-import io.ktor.client.plugins.auth.Auth
-import io.ktor.client.plugins.auth.providers.BearerTokens
-import io.ktor.client.plugins.auth.providers.bearer
-import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.client.plugins.defaultRequest
-import io.ktor.client.plugins.logging.LogLevel
-import io.ktor.client.plugins.logging.Logger
-import io.ktor.client.plugins.logging.Logging
-import io.ktor.client.plugins.logging.SIMPLE
-import io.ktor.client.plugins.plugin
-import io.ktor.client.request.HttpRequestPipeline
-import io.ktor.client.request.bearerAuth
-import io.ktor.client.request.post
-import io.ktor.client.request.setBody
-import io.ktor.http.ContentType
-import io.ktor.http.HttpHeaders
-import io.ktor.http.HttpStatusCode
-import io.ktor.http.contentType
-import io.ktor.serialization.kotlinx.json.json
-import kotlinx.coroutines.runBlocking
+import com.jawapbo.sportistic.shared.data.auth.RefreshTokenResponse
+import io.ktor.client.*
+import io.ktor.client.call.*
+import io.ktor.client.engine.*
+import io.ktor.client.plugins.*
+import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.client.plugins.logging.*
+import io.ktor.client.request.*
+import io.ktor.http.*
+import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonNamingStrategy
-import kotlinx.serialization.modules.SerializersModule
-import java.time.LocalDateTime
 
 object HttpClientFactory {
     @OptIn(ExperimentalSerializationApi::class)
@@ -55,9 +34,9 @@ object HttpClientFactory {
                         prettyPrint = true
                         isLenient = true
                         namingStrategy = JsonNamingStrategy.SnakeCase
-                        serializersModule = SerializersModule {
-                            contextual(LocalDateTime::class, LocalDateTimeSerializer)
-                        }
+//                        serializersModule = SerializersModule {
+//                            contextual(LocalDateTime::class, LocalDateTimeSerializer)
+//                        }
                     }
                 )
             }
@@ -67,13 +46,13 @@ object HttpClientFactory {
             }
         }
         client.plugin(HttpSend).intercept { request ->
-            Log.d("HttpSendInterceptor", "Intercepting request to ${request.url}")
+            println("HttpSendInterceptor, Intercepting request to ${request.url}")
 
             // Get fresh token dari DataStore untuk setiap request
             val tokens =  dataStore.getTokens().tokens
             val accessToken = tokens?.accessToken
 
-            Log.d("HttpSendInterceptor", "Current stored token: ${accessToken?.take(20)}...")
+            println("HttpSendInterceptor, Current stored token: ${accessToken?.take(20)}...")
 
             // Remove existing Authorization header jika ada
             request.headers.remove(HttpHeaders.Authorization)
@@ -81,9 +60,9 @@ object HttpClientFactory {
             // Set token yang fresh jika ada
             if (!accessToken.isNullOrBlank()) {
                 request.headers.append(HttpHeaders.Authorization, "Bearer $accessToken")
-                Log.d("HttpSendInterceptor", "Authorization header set with fresh token")
+                println("HttpSendInterceptor, Authorization header set with fresh token")
             } else {
-                Log.d("HttpSendInterceptor", "No token available, request without auth")
+                println("HttpSendInterceptor, No token available, request without auth")
             }
 
             // Execute request
@@ -91,7 +70,7 @@ object HttpClientFactory {
 
             // Handle 401 Unauthorized untuk token refresh
             if (originalCall.response.status == HttpStatusCode.Unauthorized) {
-                Log.w("HttpSendInterceptor", "Received 401, attempting token refresh")
+                println("HttpSendInterceptor, Received 401, attempting token refresh")
 
                 val refreshToken = tokens?.refreshToken
                 if (!refreshToken.isNullOrBlank()) {
@@ -100,7 +79,7 @@ object HttpClientFactory {
                         val newTokens = refreshTokenFromServer(refreshToken)
                         dataStore.saveTokens(newTokens.accessToken, newTokens.refreshToken)
 
-                        Log.d("HttpSendInterceptor", "Token refreshed successfully, retrying request")
+                        println("HttpSendInterceptor, Token refreshed successfully, retrying request")
 
                         // Retry request dengan token baru
                         request.headers.remove(HttpHeaders.Authorization)
@@ -109,12 +88,12 @@ object HttpClientFactory {
                         return@intercept execute(request)
 
                     } catch (e: Exception) {
-                        Log.e("HttpSendInterceptor", "Token refresh failed: ${e.message}")
+                        println("HttpSendInterceptor, Token refresh failed: ${e.message}")
                         dataStore.clearDataStore()
                         return@intercept originalCall // Return original 401 response
                     }
                 } else {
-                    Log.w("HttpSendInterceptor", "No refresh token available")
+                    println("HttpSendInterceptor, No refresh token available")
                 }
             }
 

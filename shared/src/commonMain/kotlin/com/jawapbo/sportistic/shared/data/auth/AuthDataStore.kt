@@ -1,6 +1,5 @@
-package com.jawapbo.sportistic.core.data
+package com.jawapbo.sportistic.shared.data.auth
 
-import com.jawapbo.sportistic.shared.data.auth.User
 import kotlinx.serialization.Serializable
 
 @Serializable

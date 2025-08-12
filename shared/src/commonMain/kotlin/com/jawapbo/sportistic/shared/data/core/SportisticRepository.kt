@@ -1,8 +1,7 @@
-package com.jawapbo.sportistic.core.model
+package com.jawapbo.sportistic.shared.data.core
 
-import android.util.Log
+import com.jawapbo.sportistic.shared.data.auth.CustomerLoginResponse
 import com.jawapbo.sportistic.shared.data.auth.LoginRequest
-import com.jawapbo.sportistic.shared.data.auth.LoginResponse
 import com.jawapbo.sportistic.shared.data.merchants.Merchant
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -18,58 +17,58 @@ class SportisticRepository(
     @Suppress("PrivatePropertyName")
     private val BASE_URL = "https://spring.sanalab.live/api"
 
-    suspend fun login(body: LoginRequest): LoginResponse? {
+    suspend fun customerLogin(body: LoginRequest): CustomerLoginResponse? {
         try {
-            val response = httpClient.post("$BASE_URL/auth/login") {
+            val response = httpClient.post("$BASE_URL/auth/customer/login") {
                 setBody(body)
             }
 
             if(response.status.isSuccess()) {
-                return response.body<LoginResponse>()
+                return response.body<CustomerLoginResponse>()
             }
             return null
         } catch (e: Exception) {
-            Log.e("SportisticRepository", "Error login: ${e.message}")
+            logE("SportisticRepository", "Error login: ${e.message}")
             return null
         }
     }
 
     suspend fun addMerchantToBookmark(id: Long): List<Long>? {
         try {
-            val response = httpClient.post("$BASE_URL/bookmarks/$id")
+            val response = httpClient.post("$BASE_URL/customers/bookmarks/$id")
             return response.body<List<Long>>()
         } catch (e: Exception) {
-            Log.e("SportisticRepository", "Error addMerchantToBookmark: ${e.message}")
+            logE("SportisticRepository", "Error addMerchantToBookmark: ${e.message}")
             return null
         }
     }
 
     suspend fun removeMerchantFromBookmark(id: Long): List<Long>? {
         try {
-            val response = httpClient.delete("$BASE_URL/bookmarks/$id")
+            val response = httpClient.delete("$BASE_URL/customers/bookmarks/$id")
             return response.body<List<Long>>()
         } catch (e: Exception) {
-            Log.e("SportisticRepository", "Error removeMerchantFromBookmark: ${e.message}")
+            logE("SportisticRepository", "Error removeMerchantFromBookmark: ${e.message}")
             return null
         }
     }
 
     suspend fun getMerchants(): List<Merchant>? {
         try {
-            val response = httpClient.get("$BASE_URL/merchants")
+            val response = httpClient.get("$BASE_URL/customers/merchants")
             return response.body<List<Merchant>>()
         } catch (e: Exception) {
-            Log.e("SportisticRepository", "Error getMerchants: ${e.message}")
+            logE("SportisticRepository", "Error getMerchants: ${e.message}")
             return null
         }
     }
 
     suspend fun getBookmarkedMerchants(): List<Long>? {
         try {
-            val response = httpClient.get("$BASE_URL/bookmarks")
+            val response = httpClient.get("$BASE_URL/customers/bookmarks")
             return response.body<List<Long>>()
         } catch (e: Exception) {
-            Log.e("SportisticRepository", "Error getBookmarkedMerchants: ${e.message}")
+            logE("SportisticRepository", "Error getBookmarkedMerchants: ${e.message}")
             return null
         }
     }

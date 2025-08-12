@@ -6,26 +6,15 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.util.Log
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.LatLng
-import com.jawapbo.sportistic.features.main.data.Place
-import io.ktor.client.HttpClient
-import io.ktor.client.call.body
-import io.ktor.client.request.get
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
-import androidx.core.net.toUri
-import com.jawapbo.sportistic.core.model.SportisticRepository
+import com.jawapbo.sportistic.shared.data.core.SportisticRepository
 import com.jawapbo.sportistic.shared.data.merchants.Merchant
-import io.ktor.client.request.delete
-import io.ktor.client.request.post
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 
 class MapsViewModel(
     private val repository: SportisticRepository,

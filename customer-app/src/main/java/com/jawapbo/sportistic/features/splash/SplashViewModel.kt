@@ -3,8 +3,8 @@ package com.jawapbo.sportistic.features.splash
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jawapbo.sportistic.core.data.AuthDataStoreManager
 import com.jawapbo.sportistic.navigation.NavKey
+import com.jawapbo.sportistic.shared.data.core.AuthDataStoreManager
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

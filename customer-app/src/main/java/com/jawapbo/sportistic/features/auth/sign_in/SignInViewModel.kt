@@ -1,10 +1,9 @@
 package com.jawapbo.sportistic.features.auth.sign_in
 
-import com.jawapbo.sportistic.core.data.AuthDataStoreManager
 import com.jawapbo.sportistic.core.model.AccountService
-import com.jawapbo.sportistic.core.model.SportisticRepository
 import com.jawapbo.sportistic.features.auth.AuthViewModel
-import io.ktor.client.HttpClient
+import com.jawapbo.sportistic.shared.data.core.AuthDataStoreManager
+import com.jawapbo.sportistic.shared.data.core.SportisticRepository
 
 @Suppress("CanBeParameter")
 class SignInViewModel(

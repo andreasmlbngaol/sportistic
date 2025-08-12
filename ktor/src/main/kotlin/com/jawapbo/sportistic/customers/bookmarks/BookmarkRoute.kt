@@ -1,4 +1,4 @@
-package com.jawapbo.sportistic.main.bookmarks
+package com.jawapbo.sportistic.customers.bookmarks
 
 import com.jawapbo.sportistic.core.config.userId
 import com.jawapbo.sportistic.core.database.bookmarks.BookmarksRepository

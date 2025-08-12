@@ -2,9 +2,9 @@ package com.jawapbo.sportistic.features.main.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jawapbo.sportistic.core.data.AuthDataStoreManager
 import com.jawapbo.sportistic.core.model.AccountService
 import com.jawapbo.sportistic.shared.data.auth.User
+import com.jawapbo.sportistic.shared.data.core.AuthDataStoreManager
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch

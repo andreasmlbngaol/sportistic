@@ -3,6 +3,7 @@ package com.jawapbo.sportistic.core.config
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.jawapbo.sportistic.shared.data.auth.User
+import com.jawapbo.sportistic.shared.data.staffs.StaffRole
 import io.ktor.server.auth.jwt.JWTPrincipal
 import io.ktor.server.config.ApplicationConfig
 import java.util.Date
@@ -20,12 +21,32 @@ object JwtConfig {
         algorithm = Algorithm.HMAC256(secretKey)
     }
 
-    fun generateAccessToken(user: User): String {
+    fun generateCustomerAccessToken(user: User): String {
         val now = System.currentTimeMillis()
         return JWT.create()
             .withClaim("type", "access")
             .withClaim("sub", user.id)
             .withClaim("name", user.name)
+            .withClaim("email", user.email)
+            .withClaim("image_url", user.profilePictureUrl)
+            .withClaim("is_email_verified", user.isEmailVerified)
+            .withIssuedAt(Date(now))
+            .withExpiresAt(Date(now + ACCESS_TOKEN_EXPIRATION_DURATION_IN_SECOND * 1000L))
+            .sign(algorithm)
+    }
+
+    fun generateStaffAccessToken(
+        user: User,
+        role: StaffRole,
+        merchantId: Long
+    ): String {
+        val now = System.currentTimeMillis()
+        return JWT.create()
+            .withClaim("type", "access")
+            .withClaim("sub", user.id)
+            .withClaim("merchant_id", merchantId)
+            .withClaim("name", user.name)
+            .withClaim("role", role.name)
             .withClaim("email", user.email)
             .withClaim("image_url", user.profilePictureUrl)
             .withClaim("is_email_verified", user.isEmailVerified)
@@ -54,8 +75,6 @@ object JwtConfig {
     }
 
     fun validateRefreshToken(token: String) = validateToken(token, "refresh")
-
-    fun validateAccessToken(token: String) = validateToken(token, "access")
 
     fun validateToken(token: String, type: String): Boolean {
         return try {

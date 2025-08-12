@@ -2,10 +2,10 @@
 android-compileSdk = "36"
 android-minSdk = "29"
 android-targetSdk = "36"
-agp = "8.11.0"
+agp = "8.11.1"
 coilCompose = "3.3.0"
 datastoreVersion = "1.1.7"
-firebaseBom = "34.0.0"
+firebaseBom = "34.1.0"
 kotlin = "2.2.0"
 coreKtx = "1.16.0"
 junit = "4.13.2"
@@ -15,7 +15,7 @@ kotlinxSerializationJson = "1.9.0"
 lifecycleRuntimeKtx = "2.9.2"
 activityCompose = "1.10.1"
 composeBom = "2025.07.00"
-mapsCompose = "6.7.0"
+mapsCompose = "6.7.1"
 material3 = "1.5.0-alpha01"
 navigationCompose = "2.9.3"
 ktor = "3.2.3"
@@ -26,14 +26,14 @@ googleid = "1.1.1"
 firebaseAuthKtx = "23.2.1"
 material3IconsExtended = "1.7.8"
 firebaseMessaging = "25.0.0"
-firebaseAuth = "24.0.0"
+firebaseAuth = "24.0.1"
 playServicesLocation = "21.3.0"
 playServicesMaps = "19.2.0"
 secretsGradlePlugin = "2.0.1"
 kotlinStdlib = "2.2.0"
 kotlinTest = "2.2.0"
-runner = "1.6.2"
-core = "1.6.1"
+#runner = "1.7.0"
+#core = "1.7.0"
 googleServices = "4.4.3"
 exposed = "1.0.0-beta-5"
 postgresql = "42.7.7"
@@ -95,8 +95,8 @@ play-services-maps = { module = "com.google.android.gms:play-services-maps", ver
 secrets-gradle-plugin = { module = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin:secrets-gradle-plugin", version.ref = "secretsGradlePlugin" }
 kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlinStdlib" }
 kotlin-test = { group = "org.jetbrains.kotlin", name = "kotlin-test", version.ref = "kotlinTest" }
-androidx-runner = { group = "androidx.test", name = "runner", version.ref = "runner" }
-androidx-core = { group = "androidx.test", name = "core", version.ref = "core" }
+#androidx-runner = { group = "androidx.test", name = "runner", version.ref = "runner" }
+#androidx-core = { group = "androidx.test", name = "core", version.ref = "core" }
 
 # Shared
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
@@ -104,7 +104,7 @@ kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.
 logback = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
 ktor-server-core = { module = "io.ktor:ktor-server-core-jvm", version.ref = "ktor" }
 ktor-server-netty = { module = "io.ktor:ktor-server-netty-jvm", version.ref = "ktor" }
-ktor-server-test-host = { module = "io.ktor:ktor-server-test-host-jvm", version.ref = "ktor" }
+#ktor-server-test-host = { module = "io.ktor:ktor-server-test-host-jvm", version.ref = "ktor" }
 ktor-server-auth = { module = "io.ktor:ktor-server-auth", version.ref = "ktor" }
 ktor-server-auth-jwt = { module = "io.ktor:ktor-server-auth-jwt", version.ref = "ktor" }
 ktor-server-content-negotiation = { module = "io.ktor:ktor-server-content-negotiation", version.ref = "ktor" }

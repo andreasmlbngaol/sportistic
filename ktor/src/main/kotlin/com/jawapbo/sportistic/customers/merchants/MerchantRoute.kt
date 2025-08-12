@@ -1,4 +1,4 @@
-package com.jawapbo.sportistic.main.merchants
+package com.jawapbo.sportistic.customers.merchants
 
 import com.jawapbo.sportistic.core.database.merchants.MerchantsRepository
 import com.jawapbo.sportistic.core.database.staffs.StaffsRepository
@@ -33,10 +33,7 @@ fun Route.merchantRoute() {
             val merchantId = MerchantsRepository.save(merchant)
                 ?: return@post call.respondJson(HttpStatusCode.InternalServerError, "Failed to save merchant")
 
-            var code = generateMerchantCode()
-            while (StaffsRepository.existByCode(code)) {
-                code = generateMerchantCode()
-            }
+            val code = generateUniqueStaffCode()
 
             val staff = Staff(
                 merchantId = merchantId,
@@ -67,9 +64,16 @@ fun Route.merchantRoute() {
     }
 }
 
-fun generateMerchantCode(): String {
+private fun generateStaffCode(): String {
     val chars = ('A'..'Z') + ('a'..'z') + ('0'..'9')
     return (1..8)
         .map { chars.random() }
         .joinToString("")
+}
+
+private fun generateUniqueStaffCode(): String {
+    while (true) {
+        val code = generateStaffCode()
+        if (!StaffsRepository.existByCode(code)) return code
+    }
 }

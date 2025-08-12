@@ -9,9 +9,9 @@ import com.jawapbo.sportistic.core.controller.metricRoute
 import com.jawapbo.sportistic.core.data.AuthNames
 import com.jawapbo.sportistic.core.plugins.*
 import com.jawapbo.sportistic.core.utils.respondJson
-import com.jawapbo.sportistic.main.bookmarks.bookmarkRoute
-import com.jawapbo.sportistic.main.merchants.merchantRoute
-import com.jawapbo.sportistic.main.places.placeRoute
+import com.jawapbo.sportistic.customers.bookmarks.bookmarkRoute
+import com.jawapbo.sportistic.customers.merchants.merchantRoute
+import com.jawapbo.sportistic.merchants.staffs.staffRoute
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -49,11 +49,20 @@ fun Application.module() {
             metricRoute(appMicrometerRegistry)
             authRoute()
 
-            // Protected routes
-            authenticate(AuthNames.JWT_AUTH) {
-                merchantRoute()
-                placeRoute()
-                bookmarkRoute()
+
+            // Protected customer routes
+            route("/customers") {
+               authenticate(AuthNames.CUSTOMER_JWT_AUTH) {
+                   merchantRoute()
+                   bookmarkRoute()
+                }
+            }
+
+            // Protected merchant routes
+            route("/merchants") {
+                authenticate(AuthNames.MERCHANT_JWT_AUTH) {
+                    staffRoute()
+                }
             }
         }
     }

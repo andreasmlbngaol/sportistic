@@ -1,22 +1,11 @@
 package com.jawapbo.sportistic.core.config
 
-import com.jawapbo.sportistic.core.database.arenas.Arenas
-import com.jawapbo.sportistic.core.database.bookings.Bookings
-import com.jawapbo.sportistic.core.database.bookings_items.BookingsItems
-import com.jawapbo.sportistic.core.database.bookmarks.Bookmarks
-import com.jawapbo.sportistic.core.database.courts.Courts
-import com.jawapbo.sportistic.core.database.facilities.Facilities
-import com.jawapbo.sportistic.core.database.facilities_merchants.FacilitiesMerchants
-import com.jawapbo.sportistic.core.database.merchants.Merchants
-import com.jawapbo.sportistic.core.database.payments.Payments
-import com.jawapbo.sportistic.core.database.places.Places
-import com.jawapbo.sportistic.core.database.staffs.Staffs
-import com.jawapbo.sportistic.core.database.users.Users
+import com.jawapbo.sportistic.core.database.SchemaVersion
+import com.jawapbo.sportistic.core.database.migrations
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
-import io.ktor.server.config.ApplicationConfig
-import org.jetbrains.exposed.v1.jdbc.Database
-import org.jetbrains.exposed.v1.jdbc.SchemaUtils
+import io.ktor.server.config.*
+import org.jetbrains.exposed.v1.jdbc.*
 import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 
 object DatabaseFactory {
@@ -37,27 +26,43 @@ object DatabaseFactory {
         }
         val datasource = HikariDataSource(hikariConfig)
         Database.connect(datasource)
-        createTableIfNotExist()
-
+        runMigrations()
     }
 
-    fun createTableIfNotExist() {
+    private fun runMigrations() {
         transaction {
-            SchemaUtils.createMissingTablesAndColumns(
-                Arenas,
-                Bookings,
-                BookingsItems,
-                Bookmarks,
-                Courts,
-                Facilities,
-                FacilitiesMerchants,
-                Merchants,
-                Payments,
-                Places,
-                Staffs,
-                Users
-            )
-        }
+            val latestVersion = migrations.maxOf { it.version }
 
+            if (!SchemaVersion.exists()) {
+                SchemaUtils.create(SchemaVersion)
+                SchemaVersion.insert { it[version] = 0 }
+            } else if(SchemaVersion.selectAll().empty()) {
+                SchemaVersion.insert { it[version] = 0 }
+            }
+
+            var currentVersion = SchemaVersion
+                .selectAll()
+                .single()[SchemaVersion.version]
+
+            if(currentVersion == 0) {
+                println("Running initial migration to version $latestVersion")
+                migrations.first().run(this)
+                SchemaVersion.update { it[version] = latestVersion }
+                return@transaction
+            }
+
+            // Jalankan migrasi yang versinya lebih tinggi
+            migrations
+                .filter { it.version > currentVersion }
+                .sortedBy { it.version }
+                .forEachIndexed { index, migration ->
+                    println("Migrating to version ${migration.version} (${index + 1}/${migrations.size})")
+                    migration.run(this)
+                    SchemaVersion.update { it[version] = migration.version }
+                    currentVersion = migration.version
+                }
+
+            println("Database is up to date: version $currentVersion")
+        }
     }
 }

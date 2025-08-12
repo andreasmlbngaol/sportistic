@@ -7,12 +7,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential.Companion.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
-import com.jawapbo.sportistic.core.data.AuthDataStoreManager
-import com.jawapbo.sportistic.core.data.AuthTokens
 import com.jawapbo.sportistic.core.model.AccountService
-import com.jawapbo.sportistic.core.model.SportisticRepository
 import com.jawapbo.sportistic.shared.data.auth.AuthMethod
+import com.jawapbo.sportistic.shared.data.auth.AuthTokens
 import com.jawapbo.sportistic.shared.data.auth.LoginRequest
+import com.jawapbo.sportistic.shared.data.core.AuthDataStoreManager
+import com.jawapbo.sportistic.shared.data.core.SportisticRepository
 import kotlinx.coroutines.launch
 
 abstract class AuthViewModel(
@@ -44,7 +44,7 @@ abstract class AuthViewModel(
         method: AuthMethod
     ): Boolean {
         Log.d("LoginViewModel", "Logging in to backend")
-        val response = repository.login(
+        val response = repository.customerLogin(
             body = LoginRequest(idToken, method)
         ) ?: return false
 
